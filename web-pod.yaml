@@ -3,10 +3,13 @@ kind: Pod
 metadata:
   name: web
   namespace: default
+  labels:
+    name: nginx
 spec:
   containers:  
   - name: node
     image: nginx   
     ports:
     - containerPort: 80
+
 
