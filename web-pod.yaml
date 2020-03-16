@@ -5,10 +5,8 @@ metadata:
   namespace: default
 spec:
   containers:  
-  - name: Node
+  - name: node
     image: nodejs:latest   
-  ports:
-  - port: 8080
-    protocol: TCP
-    targetPort: 8080
+    ports:
+    - containerPort: 80
 
