@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web1-deployment
@@ -14,8 +14,9 @@ spec:
     metadata:
       labels:
         name: web1
-  containers:  
-  - name: node
-    image: nginx   
-    ports:
-    - containerPort: 80
+    spec:
+      containers:  
+        - name: node
+          image: nginx   
+          ports:
+            - containerPort: 80
