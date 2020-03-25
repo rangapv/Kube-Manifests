@@ -17,6 +17,6 @@ spec:
     spec:
       containers:  
         - name: node
-          image: nginx   
+          image: gcr.io/rosy-cache-200605/nginx-pvr
           ports:
             - containerPort: 80
