@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web1-pod-deployment
-  namespace: default
+  namespace: hostpath 
   labels:
     name: web1-deploy
 spec:
@@ -15,9 +15,16 @@ spec:
       labels:
         name: web1
     spec:
+      volumes:
+        - name: pv-volume-storage
+          persistentVolumeClaim:
+            claimName: pv-claim
       containers:  
         - name: node
           image: gcr.io/rosy-cache-200605/nginx-pvr
           imagePullPolicy: IfNotPresent 
           ports:
             - containerPort: 80
+          volumeMounts:
+            - mountPath: "/var/www/html"
+              name: pv-volume-storage
