@@ -16,7 +16,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: nginx
-        image: gcr.io/rosy-cache-200605/nginx-pvr
+        image: gcr.io/rosy-cache-200605/nginx-pvr1
         imagePullPolicy: IfNotPresent 
         ports:
         - containerPort: 80
