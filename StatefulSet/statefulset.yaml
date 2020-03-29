@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: web
+  name: web1-pod-statefulset
 spec:
   selector:
     matchLabels:
@@ -16,16 +16,17 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: nginx
-        image: gcr.io/rosy-cache-200605/nginx-pvr 
+        image: gcr.io/rosy-cache-200605/nginx-pvr
+        imagePullPolicy: IfNotPresent 
         ports:
         - containerPort: 80
-          name: web
+          name: web1-port
         volumeMounts:
-        - name: www
-          mountPath: /usr/share/nginx/html
+        - name: www-vol
+          mountPath: /var/www/html
   volumeClaimTemplates:
   - metadata:
-      name: www
+      name: www-vol
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: "ssd1"
