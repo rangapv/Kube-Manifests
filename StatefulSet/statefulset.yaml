@@ -5,13 +5,13 @@ metadata:
 spec:
   selector:
     matchLabels:
-      name: web1 # has to match .spec.template.metadata.labels
+      name: web1-statefulset # has to match .spec.template.metadata.labels
   serviceName: "nginx"
   replicas: 3 # by default is 1
   template:
     metadata:
       labels:
-       name: web1 # has to match .spec.selector.matchLabels
+       name: web1-statefulset # has to match .spec.selector.matchLabels
     spec:
       terminationGracePeriodSeconds: 10
       containers:
