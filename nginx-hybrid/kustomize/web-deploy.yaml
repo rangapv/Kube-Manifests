@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web1-pod-deployment
+  namespace: default
+  labels:
+    name: web1-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: web1
+  template:
+    metadata:
+      labels:
+        name: web1
+    spec:
+      containers:  
+        - name: node
+          image: nginx
+          imagePullPolicy: IfNotPresent 
+          ports:
+            - containerPort: 80
