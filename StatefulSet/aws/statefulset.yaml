@@ -6,8 +6,8 @@ spec:
   selector:
     matchLabels:
       name: web1-statefulset # has to match .spec.template.metadata.labels
-  serviceName: "nginx"
-  replicas: 3 # by default is 1
+  serviceName: "nginx-statefulset"
+  replicas: 2 # by default is 1
   template:
     metadata:
       labels:
@@ -15,7 +15,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-      - name: nginx
+      - name: nginx-statefulset
         image: nginx
         imagePullPolicy: IfNotPresent 
         ports:

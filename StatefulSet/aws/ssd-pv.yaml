@@ -2,6 +2,6 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: ssd1 
-provisioner: kubernetes.io/gce-pd
+provisioner: kubernetes.io/aws-ebs
 parameters:
-  type: pd-ssd
+  type: gp2 

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: web1-stateful-service 
   labels:
-    app: nginx
+    app: nginx-statefulset
 spec:
   selector:
     name: web1-statefulset
