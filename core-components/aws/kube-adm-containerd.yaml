@@ -6,7 +6,7 @@ bootstrapTokens:
   ttl: "0"
 nodeRegistration:
  kubeletExtraArgs:
-  cloud-provider: external
+  cloud-provider: aws 
   cloud-config: /etc/kubernetes/cloud.conf
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
@@ -16,12 +16,14 @@ apiServer:
   extraArgs:
     enable-admission-plugins: NodeRestriction,AlwaysPullImages,DefaultStorageClass
     authorization-mode: Node,RBAC
+    cloud-provider: aws 
 controllerManager:
   extraArgs:
     allocate-node-cidrs: "true"
     cluster-cidr: "10.244.0.0/16"
     node-cidr-mask-size: "20"
     enable-taint-manager: "false"
+    cloud-provider: aws 
 networking:
   podSubnet: "10.244.0.0/16"
 ---
