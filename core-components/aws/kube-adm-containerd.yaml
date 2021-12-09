@@ -24,7 +24,7 @@ controllerManager:
     cluster-cidr: "10.244.0.0/16"
     node-cidr-mask-size: "20"
     enable-taint-manager: "false"
-    cloud-provider: aws 
+    #cloud-provider: aws 
     #cloud-config: /etc/kubernetes/cloud.conf
 networking:
   podSubnet: "10.244.0.0/16"
