@@ -1,0 +1,34 @@
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
+bootstrapTokens:
+- token:
+  ttl: "0"
+nodeRegistration:
+ kubeletExtraArgs:
+  cloud-provider: aws 
+  cloud-config: /etc/kubernetes/cloud.conf
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+kubernetesVersion: v1.23.0
+apiServer:
+  extraArgs:
+    enable-admission-plugins: NodeRestriction,AlwaysPullImages,DefaultStorageClass
+    authorization-mode: Node,RBAC
+    cloud-provider: aws 
+    #cloud-config: /etc/kubernetes/cloud.conf
+controllerManager:
+  extraArgs:
+    allocate-node-cidrs: "true"
+    cluster-cidr: "10.244.0.0/16"
+    node-cidr-mask-size: "20"
+    enable-taint-manager: "false"
+    #cloud-provider: aws 
+    #cloud-config: /etc/kubernetes/cloud.conf
+networking:
+  podSubnet: "10.244.0.0/16"
+---
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+cgroupDriver: systemd
