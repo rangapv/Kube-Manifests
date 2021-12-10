@@ -1,6 +1,7 @@
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: InitConfiguration
+kubernetesVersion: v1.22.4
 bootstrapTokens:
 - token:
   ttl: "0"
@@ -11,7 +12,7 @@ nodeRegistration:
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
-kubernetesVersion: v1.23.0
+kubernetesVersion: v1.22.4
 apiServer:
   extraArgs:
     enable-admission-plugins: NodeRestriction,AlwaysPullImages,DefaultStorageClass
