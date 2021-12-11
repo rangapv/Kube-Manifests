@@ -6,7 +6,7 @@ bootstrapTokens:
   ttl: "0"
 nodeRegistration:
  kubeletExtraArgs:
-  cloud-provider: aws 
+  cloud-provider: external
   cloud-config: /etc/kubernetes/cloud.conf
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
