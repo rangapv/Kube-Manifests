@@ -58,7 +58,7 @@ spec:
       volumes:
       - name: ccmawssecret
         secret:
-          secretName: aws-secret
+          secretName: aws-ccm-secret
       - name: ssl
         hostPath:
           path: /etc/ssl
