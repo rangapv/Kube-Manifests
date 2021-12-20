@@ -17,6 +17,7 @@ apiServer:
     enable-admission-plugins: NodeRestriction,AlwaysPullImages,DefaultStorageClass
     authorization-mode: Node,RBAC
     cloud-provider: external 
+    feature-gates: CSIMigration=true,CSIMigrationAWS=true,CSIStorageCapacity=true,CSIVolumeHealth=true,ExpandPersistentVolumes=true
     #cloud-config: /etc/kubernetes/cloud.conf
 controllerManager:
   extraArgs:
@@ -25,7 +26,7 @@ controllerManager:
     node-cidr-mask-size: "20"
     enable-taint-manager: "false"
     cloud-provider: external 
-    cloud-config: /etc/kubernetes/cloud.conf
+    #cloud-config: /etc/kubernetes/cloud.conf
 networking:
   podSubnet: "10.244.0.0/16"
 ---
