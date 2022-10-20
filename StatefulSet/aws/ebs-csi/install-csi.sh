@@ -2,6 +2,7 @@
 set -E
 source <(curl -s https://raw.githubusercontent.com/rangapv/bash-source/main/s1.sh) > /dev/null 2>&1
 source <(curl -s https://raw.githubusercontent.com/rangapv/kubestatus/main/ks.sh) > /dev/null 2>&1
+source <(curl -s https://raw.githubusercontent.com/rangapv/metascript/main/AWS/metadata-aws.sh) > /dev/null 2>&1
 
 chkinststat() {
 
@@ -57,8 +58,16 @@ fi
 
 getinstdet() {
 
-		mastc1=`aws ec2 associate-iam-instance-profile --instance-id i-01f63de81859449d8 --iam-instance-profile Name="k8srole" --region=us-east-2`
-
+		mastc1=`aws ec2 associate-iam-instance-profile --instance-id ${str232} --iam-instance-profile Name="k8srole" --region=${str231}`
+   
+   mastc1s="$?"
+   if [[ (( $masc1s -eq 0 )) ]]
+   then
+	   echo ""
+   else
+	   echo "Unable to set profile for this instance ${str232}"
+	   exit
+   fi
 }
 
 
