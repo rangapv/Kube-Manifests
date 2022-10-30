@@ -1,0 +1,114 @@
+#admin/cloud/ccm.yaml 
+
+# This is an example of how to setup cloud-controller-manger as a Daemonset in your cluster.
+# It assumes that your masters can run pods and has the role node-role.kubernetes.io/master
+# Note that this Daemonset will not work straight out of the box for your cloud, this is
+# meant to be a guideline.
+#
+#
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cloud-controller-manager
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: system:cloud-controller-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- apiGroup: ""
+  kind: ServiceAccount
+  name: cloud-controller-manager
+  namespace: kube-system
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    k8s-app: cloud-controller-manager
+  name: cloud-controller-manager
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      k8s-app: cloud-controller-manager
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      name: cloud-controller-manager
+      labels:
+        k8s-app: cloud-controller-manager
+    spec:
+      dnsPolicy: Default
+      hostNetwork: true
+      serviceAccountName: cloud-controller-manager
+      containers:
+      - name: cloud-controller-manager
+        # for in-tree providers we use k8s.gcr.io/cloud-controller-manager
+        # this can be replaced with any other image for out-of-tree providers
+        #image: k8s.gcr.io/cloud-controller-manager:v1.8.0
+        image: registry.k8s.io/provider-aws/cloud-controller-manager:v1.23.0-alpha.0
+        imagePullPolicy: Always
+        command:
+        - /usr/local/bin/cloud-controller-manager
+        - --cloud-provider=aws  # Add your own cloud provider here!
+        - --cloud-config=/tmp/aws.conf
+          #- --leader-elect=false
+        - --leader-elect=true
+        - --use-service-account-credentials
+        # these flags will vary for every cloud provider
+        - --allocate-node-cidrs=true
+        - --configure-cloud-routes=true
+        - --cluster-cidr=172.17.0.0/16
+        - --kubeconfig=/tmp/config
+        - --v=9
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws-access-1
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-access-2
+              key: AWS_SECRET_ACCESS_KEY
+        volumeMounts:
+        - mountPath: /tmp
+          name: ccmawssecret
+          readOnly: true
+        - mountPath: /etc/ssl
+          name: ssl
+          readOnly: true
+      volumes:
+      - name: ccmawssecret
+        secret:
+          secretName: aws-ccm-secret
+      - name: ssl
+        hostPath:
+          path: /etc/ssl
+      tolerations:
+      # this is required so CCM can bootstrap itself
+      - key: node.cloudprovider.kubernetes.io/uninitialized
+        value: "true"
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+          #- key: "CriticalAddonsOnly"
+          #operator: Exists
+      # this is to have the daemonset runnable on master nodes
+      # the taint may vary depending on your cluster setup
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      # this is to restrict CCM to only run on master nodes
+      # the node selector may vary depending on your cluster setup
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
