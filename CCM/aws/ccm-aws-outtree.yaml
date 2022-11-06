@@ -63,7 +63,7 @@ spec:
         - --use-service-account-credentials
         # these flags will vary for every cloud provider
         - --allocate-node-cidrs=true
-        - --configure-cloud-routes=true
+        - --configure-cloud-routes=false
         - --cluster-cidr=172.17.0.0/16
         - --kubeconfig=/tmp/config
         - --v=9
