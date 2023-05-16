@@ -15,6 +15,22 @@ else
 	echo ""
 fi
 
+
+if [[ ! -z  "$1" ]]
+then
+
+AWS_ACCESS_KEY_ID="$1"
+
+fi
+
+
+if [[ ! -z  "$2" ]]
+then
+
+AWS_SECRET_ACCESS_KEY="$2"
+
+fi
+
 awsid1=`echo $AWS_ACCESS_KEY_ID`
 awsid2=`echo $AWS_SECRET_ACCESS_KEY`
 
