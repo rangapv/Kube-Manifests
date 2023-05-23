@@ -2,7 +2,7 @@
 set -E
 source <(curl -s https://raw.githubusercontent.com/rangapv/bash-source/main/s1.sh) >>/dev/null 2>&1
 source <(curl -s https://raw.githubusercontent.com/rangapv/kubestatus/main/ks.sh) >>/dev/null 2>&1
-source <(curl -s https://raw.githubusercontent.com/rangapv/metascript/main/AWS/metadata-aws.sh) >>/dev/null 2>&1
+source <(curl -s https://raw.githubusercontent.com/rangapv/metascript/main/AWS/chkmetadata.sh) >>/dev/null 2>&1
 
 chkinststat() {
 #echo "master is $master, node is $node"
@@ -16,7 +16,7 @@ else
 fi
 
 
-if [[ ! -z  "$1" ]]
+if [ ! -z  "$1" ]
 then
 
 AWS_ACCESS_KEY_ID="$1"
@@ -24,7 +24,7 @@ AWS_ACCESS_KEY_ID="$1"
 fi
 
 
-if [[ ! -z  "$2" ]]
+if [ ! -z  "$2" ]
 then
 
 AWS_SECRET_ACCESS_KEY="$2"
@@ -58,7 +58,7 @@ else
 fi
 awsc1=`which aws`
 awsc1s="$?"
-if [[ (( $awsc1s -eq 0 )) ]]
+if [[ (( "$awsc1s" -eq "0" )) ]]
 then
 	echo ""
 else
@@ -76,7 +76,7 @@ fi
 
 getinstdet() {
 
-		mastc1=`aws ec2 associate-iam-instance-profile --instance-id ${str232} --iam-instance-profile Name="k8srole" --region=${str231}`
+	mastc1=`aws ec2 associate-iam-instance-profile --instance-id ${str232} --iam-instance-profile Name="k8srole" --region=${str231}`
    
    mastc1s="$?"
    if [[ (( $mastc1s -eq 0 )) ]]
@@ -106,22 +106,31 @@ fi
 }
 
 csidep() {
-finale1=`kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.12"`
-finale1s="$?"
-if [[ (( $finale1s -eq 0 )) ]]
+ecsic=`kubectl get po --all-namespaces | grep "ebs-csi-" | grep "unning" |wc -l`
+
+if [[ (( $ecsic -lt 2 )) ]]
 then
-	echo "CSI driver created chk pod status(kubectl get pods -all-namespaces) to make sure"
-else
+  finale1=`kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.12"`
+  finale1s="$?"
+
+  if [[ (( $finale1s -eq 0 )) ]]
+  then
+	echo "CSI driver created chk pod status(kubectl get pods --all-namespaces) to make sure"
+  else
 	echo "CSI install failed pls debug"
+  fi
+
+else
+	echo "ebscsi install requirement already satisified, check pod status"
+	echo "Total pods on ebs-csi running are $ecsic"
 fi
+
 }
 
 
 #Main Begins
-
-chkinststat
+chkinststat "$1" "$2"
 chkpre
 
 cresec
 csidep
-
