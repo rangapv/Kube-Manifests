@@ -67,7 +67,7 @@ else
 	if [[ (( $insawd -eq 0 )) ]]
 	then
 		echo "Successfully installed aws cli "
-		getinstdet
+#		getinstdet
 	else
 		echo "Unable to install aws-cli"
 	fi
@@ -110,7 +110,8 @@ ecsic=`kubectl get po --all-namespaces | grep "ebs-csi-" | grep "unning" |wc -l`
 
 if [[ (( $ecsic -lt 2 )) ]]
 then
-  finale1=`kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.12"`
+  #finale1=`kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.12"`
+  finale1=`kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.19"`
   finale1s="$?"
 
   if [[ (( $finale1s -eq 0 )) ]]
