@@ -114,6 +114,15 @@ hlm1s="$?"
 if [[ (( $hlm1s -ne 0 )) ]]
 then
 	inshlm=`mkdir helm;cd ./helm;git init;git pull https://github.com/rangapv/CloudNative.git;./helm.sh`
+	inshlms=`which helm`
+	inshlms1="$?"
+	if [[ (( $inshlms1 -eq 0 )) ]]
+	then
+        hlmadd=`helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver`
+	hlmup=`helm repo update`
+        hlmebs=`helm upgrade --install aws-ebs-csi-driver --namespace kube-system aws-ebs-csi-driver/aws-ebs-csi-driver`
+	fi
+
 else
 	echo "Current installation of helm is $hlm1"
 fi
