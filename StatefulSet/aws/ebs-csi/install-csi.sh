@@ -105,13 +105,29 @@ fi
 
 }
 
+helmins() {
+
+
+hlm1=`which helm`
+hlm1s="$?"
+
+if [[ (( $hlm1s -ne 0 )) ]]
+then
+	inshlm=`mkdir helm;cd ./helm;git init;git pull https://github.com/rangapv/CloudNative.git;./helm.sh`
+else
+	echo "Current installation of helm is $hlm1"
+fi
+
+}
+
 csidep() {
 ecsic=`kubectl get po --all-namespaces | grep "ebs-csi-" | grep "unning" |wc -l`
 
-if [[ (( $ecsic -lt 2 )) ]]
+if [[ (( $ecsic -lt 1 )) ]]
 then
   #finale1=`kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.12"`
-  finale1=`kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.19"`
+  #finale1=`kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.19"`
+  helmins  
   finale1s="$?"
 
   if [[ (( $finale1s -eq 0 )) ]]
@@ -123,7 +139,7 @@ then
 
 else
 	echo "ebscsi install requirement already satisified, check pod status"
-	echo "Total pods on ebs-csi running are $ecsic"
+	echo "Total ebs-csi pods running are $ecsic"
 fi
 
 }
